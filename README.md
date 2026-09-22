@@ -1,3 +1,6 @@
+# NOMBRE ESTUDIANTE:
+Alejandro Caycedo Montero
+
 # PokeSearch — Terminal de Archivo Pokémon
 
 Una Pokédex que no parece una Pokédex. En lugar de la clásica carcasa roja con
