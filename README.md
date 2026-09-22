@@ -1,6 +1,9 @@
 # NOMBRE ESTUDIANTE:
 Alejandro Caycedo Montero
 
+#LINK DESPLEGADO:
+https://acaycedo24.github.io/base-pokedex-20262-alejandrocaycedo/
+
 # PokeSearch — Terminal de Archivo Pokémon
 
 Una Pokédex que no parece una Pokédex. En lugar de la clásica carcasa roja con
