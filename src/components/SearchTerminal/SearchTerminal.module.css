@@ -1,0 +1,159 @@
+.root {
+  position: relative;
+  width: 100%;
+  max-width: 660px;
+  margin-inline: auto;
+}
+
+/* ── Campo ─────────────────────────────────────────────────────────────── */
+
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--shadow-panel);
+  overflow: hidden;
+  transition:
+    border-color var(--t-base) var(--ease-out-expo),
+    box-shadow var(--t-base) var(--ease-out-expo);
+}
+
+.field:focus-within {
+  border-color: var(--glass-border-lit);
+  box-shadow:
+    var(--shadow-panel),
+    0 0 0 1px color-mix(in srgb, var(--c-accent) 35%, transparent),
+    0 0 40px -10px var(--c-accent);
+}
+
+/* Línea de escaneo que recorre el campo mientras tiene el foco. */
+.field::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--c-accent), transparent);
+  opacity: 0;
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
+.field:focus-within::after {
+  animation: scan-pass 2.6s var(--ease-in-out) infinite;
+}
+
+.prompt {
+  flex-shrink: 0;
+  color: var(--c-accent);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  line-height: 1;
+  user-select: none;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  outline: none;
+  color: var(--c-text);
+  caret-color: var(--c-accent);
+  font-family: var(--font-mono);
+  font-size: var(--fs-lg);
+  letter-spacing: 0.02em;
+}
+
+.input::placeholder {
+  color: var(--c-text-faint);
+  letter-spacing: var(--tracking-wide);
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+}
+
+/* Botón de limpiar: solo aparece cuando hay algo que limpiar. */
+.clear {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--r-full);
+  color: var(--c-text-faint);
+  transition:
+    color var(--t-fast) var(--ease-out-expo),
+    background var(--t-fast) var(--ease-out-expo);
+}
+
+.clear:hover,
+.clear:focus-visible {
+  color: var(--c-danger);
+  background: rgba(255, 77, 109, 0.12);
+}
+
+/* Indicador de actividad: gira mientras hay una petición en curso. */
+.busy {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border: 2px solid color-mix(in srgb, var(--c-accent) 25%, transparent);
+  border-top-color: var(--c-accent);
+  border-radius: var(--r-full);
+  animation: radar-sweep 0.7s linear infinite;
+}
+
+/* ── Línea de estado ───────────────────────────────────────────────────── */
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-4) 0;
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  color: var(--c-text-faint);
+  text-transform: uppercase;
+}
+
+.statusAlert {
+  color: var(--c-amber);
+}
+
+/* ── Desplegable ───────────────────────────────────────────────────────── */
+
+.popup {
+  position: absolute;
+  top: calc(100% + var(--s-2));
+  left: 0;
+  right: 0;
+  z-index: var(--z-dropdown);
+  max-height: min(58vh, 420px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  background: rgba(5, 8, 19, 0.82);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--shadow-panel);
+  animation: materialize var(--t-base) var(--ease-out-expo) both;
+}
+
+@media (max-width: 640px) {
+  .input {
+    font-size: 1rem; /* < 16px provoca zoom automático en iOS al enfocar */
+  }
+
+  .popup {
+    max-height: 50vh;
+  }
+}

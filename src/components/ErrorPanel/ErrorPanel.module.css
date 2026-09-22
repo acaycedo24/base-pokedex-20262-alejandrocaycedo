@@ -1,0 +1,59 @@
+.root {
+  display: grid;
+  gap: var(--s-3);
+  width: 100%;
+  max-width: 660px;
+  margin-inline: auto;
+  padding: var(--s-5);
+  border: 1px solid var(--tone);
+  border-left-width: 3px;
+  border-radius: var(--r-md);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  animation: materialize var(--t-base) var(--ease-out-expo) both;
+}
+
+/* Dos tonos distintos para dos problemas distintos: que un espécimen no
+   exista no es lo mismo que haber perdido el enlace (PRD FR-01). */
+.notfound {
+  --tone: var(--c-amber);
+}
+
+.error {
+  --tone: var(--c-danger);
+}
+
+.code {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-mega);
+  color: var(--tone);
+  text-transform: uppercase;
+}
+
+.message {
+  font-size: var(--fs-base);
+  color: var(--c-text);
+}
+
+.hint {
+  font-size: var(--fs-sm);
+  color: var(--c-text-faint);
+}
+
+.retry {
+  justify-self: start;
+  padding: var(--s-2) var(--s-4);
+  border: 1px solid var(--tone);
+  border-radius: var(--r-full);
+  color: var(--tone);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  transition: background var(--t-fast) var(--ease-out-expo);
+}
+
+.retry:hover,
+.retry:focus-visible {
+  background: color-mix(in srgb, var(--tone) 15%, transparent);
+}

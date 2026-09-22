@@ -1,0 +1,123 @@
+.root {
+  padding: var(--s-2);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--s-2) var(--s-3);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  color: var(--c-text-faint);
+  text-transform: uppercase;
+}
+
+.clearAll {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  color: var(--c-text-faint);
+  text-transform: uppercase;
+  transition: color var(--t-fast) var(--ease-out-expo);
+}
+
+.clearAll:hover,
+.clearAll:focus-visible {
+  color: var(--c-danger);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  border-radius: var(--r-sm);
+  animation: rise-in var(--t-base) var(--ease-out-expo) both;
+  animation-delay: var(--delay, 0ms);
+  transition: background var(--t-fast) var(--ease-out-expo);
+}
+
+.item:hover,
+.item:focus-within {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.pick {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  min-width: 0;
+  padding: var(--s-2) var(--s-3);
+  text-align: left;
+}
+
+.sprite {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  /* Halo que hace que el sprite pixelado se lea como proyección, no como
+     una imagen pegada sobre el vidrio. */
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--c-accent) 55%, transparent));
+  image-rendering: pixelated;
+}
+
+.meta {
+  min-width: 0;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-sm);
+  color: var(--c-text-dim);
+}
+
+.item:hover .name {
+  color: var(--c-text);
+}
+
+.dex {
+  font-size: var(--fs-micro);
+  color: var(--c-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.remove {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  margin-right: var(--s-2);
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-full);
+  color: var(--c-text-faint);
+  font-size: var(--fs-sm);
+  line-height: 1;
+  opacity: 0;
+  transition:
+    opacity var(--t-fast) linear,
+    color var(--t-fast) var(--ease-out-expo);
+}
+
+/* El botón de borrar permanece oculto hasta que el elemento es el objetivo
+   del puntero o del teclado, pero nunca deja de existir para el lector de
+   pantalla ni de ser alcanzable con Tab. */
+.item:hover .remove,
+.remove:focus-visible {
+  opacity: 1;
+}
+
+.remove:hover,
+.remove:focus-visible {
+  color: var(--c-danger);
+}
+
+.empty {
+  padding: var(--s-4);
+  font-size: var(--fs-sm);
+  color: var(--c-text-faint);
+  text-align: center;
+  letter-spacing: var(--tracking-wide);
+}

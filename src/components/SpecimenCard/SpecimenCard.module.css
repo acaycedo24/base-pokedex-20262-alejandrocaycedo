@@ -1,0 +1,239 @@
+/* Perspectiva en el contenedor y rotación en el hijo: así la tarjeta gira
+   dentro de un espacio 3D estable en lugar de deformarse sobre sí misma. */
+.stage {
+  perspective: 1100px;
+  width: 100%;
+  max-width: 660px;
+  margin-inline: auto;
+}
+
+.card {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --glare-x: 50%;
+  --glare-y: 50%;
+  --glare-opacity: 0;
+
+  position: relative;
+  padding: var(--s-5);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow:
+    var(--shadow-panel),
+    0 0 60px -24px var(--c-accent);
+  overflow: hidden;
+  transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+  transform-style: preserve-3d;
+  /* Corta al soltar: la transición solo suaviza el regreso al reposo, porque
+     durante el movimiento el ref ya escribe un valor por cuadro. */
+  transition: transform var(--t-base) var(--ease-out-expo);
+  animation: materialize var(--t-slow) var(--ease-out-expo) both;
+}
+
+/* Reflejo que sigue al cursor. */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    380px circle at var(--glare-x) var(--glare-y),
+    rgba(255, 255, 255, 0.14),
+    transparent 60%
+  );
+  opacity: var(--glare-opacity);
+  transition: opacity var(--t-base) linear;
+}
+
+/* Barrido único de línea de escaneo al materializarse la ficha. */
+.card::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 3px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--c-accent), transparent);
+  animation: scan-pass 1.4s var(--ease-in-out) 1 both;
+}
+
+/* ── Cabecera ──────────────────────────────────────────────────────────── */
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-4);
+  margin-bottom: var(--s-4);
+}
+
+.dex {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-mega);
+  color: var(--c-accent);
+}
+
+.name {
+  font-size: clamp(1.75rem, 5.5vw, 2.75rem);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-shadow: 0 0 28px color-mix(in srgb, var(--c-accent) 55%, transparent);
+}
+
+.cryButton {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-full);
+  color: var(--c-text-dim);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  transition:
+    color var(--t-fast) var(--ease-out-expo),
+    border-color var(--t-fast) var(--ease-out-expo);
+}
+
+.cryButton:hover,
+.cryButton:focus-visible {
+  color: var(--c-accent);
+  border-color: var(--glass-border-lit);
+}
+
+/* ── Cuerpo ────────────────────────────────────────────────────────────── */
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: var(--s-5);
+  align-items: center;
+}
+
+.art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  /* Se adelanta en el eje Z: al inclinar la tarjeta, el sprite flota sobre
+     el vidrio en lugar de parecer impreso en él. */
+  transform: translateZ(42px);
+}
+
+.artGlow {
+  position: absolute;
+  inset: 12%;
+  border-radius: var(--r-full);
+  background: radial-gradient(circle, var(--c-accent), transparent 68%);
+  opacity: 0.32;
+  filter: blur(26px);
+  animation: glow-pulse 4.5s var(--ease-in-out) infinite;
+}
+
+.sprite {
+  position: relative;
+  width: 100%;
+  max-width: 230px;
+  aspect-ratio: 1;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.55));
+}
+
+.panel {
+  display: grid;
+  gap: var(--s-4);
+}
+
+.types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+/* El color del tipo entra como luz: borde y halo teñidos sobre un fondo
+   translúcido, nunca como un rectángulo de color plano. */
+.type {
+  padding: var(--s-1) var(--s-3);
+  border: 1px solid color-mix(in srgb, var(--type-color) 60%, transparent);
+  border-radius: var(--r-full);
+  background: color-mix(in srgb, var(--type-color) 16%, transparent);
+  box-shadow: 0 0 18px -6px var(--type-color);
+  color: color-mix(in srgb, var(--type-color) 75%, white);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-3);
+}
+
+.metric {
+  padding: var(--s-2) var(--s-3);
+  border-left: 1px solid color-mix(in srgb, var(--c-accent) 40%, transparent);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.metricLabel {
+  display: block;
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  color: var(--c-text-faint);
+  text-transform: uppercase;
+}
+
+.metricValue {
+  display: block;
+  font-size: var(--fs-base);
+  color: var(--c-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.abilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+.ability {
+  padding: var(--s-1) var(--s-2);
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-micro);
+  color: var(--c-text-dim);
+}
+
+.hidden {
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--c-magenta) 55%, transparent);
+  color: var(--c-magenta);
+}
+
+.sectionLabel {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-mega);
+  color: var(--c-text-faint);
+  text-transform: uppercase;
+  margin-bottom: var(--s-2);
+}
+
+@media (max-width: 720px) {
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .art {
+    transform: none; /* sin inclinación en móvil, tampoco profundidad */
+  }
+
+  .head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

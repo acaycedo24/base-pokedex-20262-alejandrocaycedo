@@ -1,0 +1,266 @@
+.root {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: var(--s-5);
+  width: 100%;
+  max-width: 1100px;
+  margin-inline: auto;
+  padding: var(--s-5);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--shadow-panel);
+  animation: materialize var(--t-slow) var(--ease-out-expo) both;
+}
+
+/* ── Lienzo del radar ──────────────────────────────────────────────────── */
+
+.canvas {
+  position: relative;
+  align-self: start;
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.ring {
+  fill: none;
+  stroke: color-mix(in srgb, var(--c-accent) 16%, transparent);
+  stroke-width: 1;
+}
+
+.divider {
+  stroke: color-mix(in srgb, var(--c-accent) 12%, transparent);
+  stroke-width: 1;
+}
+
+/* Sector de región: transparente hasta que se enfoca o se señala. */
+.sector {
+  fill: transparent;
+  stroke: transparent;
+  cursor: pointer;
+  transition: fill var(--t-base) var(--ease-out-expo);
+}
+
+.sector:hover {
+  fill: color-mix(in srgb, var(--c-accent) 7%, transparent);
+}
+
+.sectorActive {
+  fill: color-mix(in srgb, var(--c-accent) 12%, transparent);
+  stroke: color-mix(in srgb, var(--c-accent) 40%, transparent);
+  stroke-width: 1;
+}
+
+.regionLabel {
+  fill: var(--c-text-faint);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  pointer-events: none;
+  transition: fill var(--t-base) var(--ease-out-expo);
+}
+
+.regionLabelActive {
+  fill: var(--c-accent);
+}
+
+.regionCount {
+  fill: var(--c-text-faint);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  pointer-events: none;
+}
+
+/* Las 1013 localizaciones del callejero, dibujadas como un único trazo.
+   Ver el comentario de `backdropPath` en HoloMap.tsx. */
+.backdrop {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.16);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+/* Barrido giratorio del radar. */
+.sweep {
+  transform-origin: 310px 310px;
+  animation: radar-sweep 5.5s linear infinite;
+  pointer-events: none;
+}
+
+.node {
+  cursor: pointer;
+  transition:
+    r var(--t-fast) var(--ease-out-expo),
+    opacity var(--t-fast) linear;
+}
+
+.nodeHalo {
+  pointer-events: none;
+}
+
+.nodeActive .nodeCore {
+  stroke: #fff;
+  stroke-width: 1.5;
+}
+
+.center {
+  fill: var(--c-accent);
+}
+
+.centerRing {
+  fill: none;
+  stroke: var(--c-accent);
+  stroke-width: 1;
+  opacity: 0.6;
+}
+
+/* ── Panel lateral ─────────────────────────────────────────────────────── */
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  min-width: 0;
+}
+
+.sideHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.meta {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  color: var(--c-text-faint);
+  text-transform: uppercase;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  max-height: 430px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: var(--s-1);
+}
+
+.zone {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--s-1) var(--s-3);
+  width: 100%;
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid transparent;
+  border-left: 2px solid color-mix(in srgb, var(--c-accent) 45%, transparent);
+  border-radius: var(--r-sm);
+  background: rgba(255, 255, 255, 0.03);
+  text-align: left;
+  transition:
+    background var(--t-fast) var(--ease-out-expo),
+    border-color var(--t-fast) var(--ease-out-expo);
+}
+
+.zone:hover,
+.zone:focus-visible,
+.zoneHot {
+  background: color-mix(in srgb, var(--c-accent) 12%, transparent);
+  border-left-color: var(--c-accent);
+}
+
+.zoneName {
+  font-size: var(--fs-sm);
+  color: var(--c-text);
+}
+
+.zoneRegion {
+  grid-column: 1;
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  color: var(--c-text-faint);
+  text-transform: uppercase;
+}
+
+.zoneChance {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  align-self: center;
+  font-size: var(--fs-sm);
+  color: var(--c-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.zoneDetails {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1);
+  margin-top: var(--s-1);
+}
+
+.chip {
+  padding: 1px var(--s-2);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-full);
+  font-size: var(--fs-micro);
+  color: var(--c-text-dim);
+}
+
+.note {
+  padding: var(--s-4);
+  line-height: 1.6;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  border-radius: var(--r-md);
+  font-size: var(--fs-sm);
+  color: var(--c-text-faint);
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.back {
+  align-self: flex-start;
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  color: var(--c-text-faint);
+  text-transform: uppercase;
+  transition: color var(--t-fast) var(--ease-out-expo);
+}
+
+.back:hover,
+.back:focus-visible {
+  color: var(--c-accent);
+}
+
+@media (max-width: 900px) {
+  .root {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .list {
+    max-height: 320px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sweep {
+    animation: none;
+    opacity: 0.35;
+  }
+}

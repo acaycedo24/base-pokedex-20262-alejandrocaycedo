@@ -1,0 +1,84 @@
+.list {
+  padding: var(--s-2);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--s-2) var(--s-3);
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  color: var(--c-text-faint);
+  text-transform: uppercase;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  /* Entrada escalonada: el retardo lo fija el índice desde el componente. */
+  animation: rise-in var(--t-base) var(--ease-out-expo) both;
+  animation-delay: var(--delay, 0ms);
+  transition: background var(--t-fast) var(--ease-out-expo);
+}
+
+.option:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.active {
+  background: color-mix(in srgb, var(--c-accent) 14%, transparent);
+  box-shadow: inset 2px 0 0 var(--c-accent);
+}
+
+.dex {
+  flex-shrink: 0;
+  min-width: 5ch;
+  font-size: var(--fs-micro);
+  color: var(--c-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-sm);
+  color: var(--c-text-dim);
+}
+
+.active .name {
+  color: var(--c-text);
+}
+
+/* Fragmento coincidente. Es lo que confirma al usuario por qué está viendo
+   esta entrada y no otra. */
+.match {
+  color: var(--c-accent);
+  font-weight: 700;
+}
+
+.enter {
+  flex-shrink: 0;
+  font-size: var(--fs-micro);
+  color: var(--c-accent);
+  opacity: 0;
+  letter-spacing: var(--tracking-wide);
+}
+
+.active .enter {
+  opacity: 1;
+}
+
+.empty {
+  padding: var(--s-4);
+  font-size: var(--fs-sm);
+  color: var(--c-text-faint);
+  text-align: center;
+  letter-spacing: var(--tracking-wide);
+}

@@ -1,0 +1,62 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-full);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+.button {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  color: var(--c-text-dim);
+  transition: color var(--t-fast) var(--ease-out-expo);
+}
+
+.button:hover,
+.button:focus-visible {
+  color: var(--c-accent);
+}
+
+.button[aria-pressed='true'] {
+  color: var(--c-danger);
+}
+
+.label {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  color: var(--c-text-faint);
+  text-transform: uppercase;
+  /* Reserva el ancho del texto más largo para que el pill no cambie de
+     tamaño al alternar entre "AUDIO" y "MUDO". */
+  min-width: 4ch;
+}
+
+/* ── Control de volumen ──────────────────────────────────────────────────
+   Colapsado por defecto; se despliega al pasar el puntero o al recibir foco
+   dentro del grupo, de modo que sigue siendo alcanzable por teclado.        */
+
+.slider {
+  width: 0;
+  opacity: 0;
+  accent-color: var(--c-accent);
+  transition:
+    width var(--t-base) var(--ease-out-expo),
+    opacity var(--t-fast) linear;
+}
+
+.root:hover .slider,
+.root:focus-within .slider {
+  width: 72px;
+  opacity: 1;
+}
+
+.slider:disabled {
+  cursor: not-allowed;
+}

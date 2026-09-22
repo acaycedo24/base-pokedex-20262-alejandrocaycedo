@@ -1,0 +1,6 @@
+# Fallback de SPA para hosts estáticos (Netlify y compatibles).
+#
+# Sin esta regla, entrar directamente a /pokemon/pikachu devuelve un 404: el
+# servidor busca ese archivo y no existe. Todas las rutas las resuelve el
+# Router en el navegador, así que cualquier ruta debe servir index.html.
+/*    /index.html   200

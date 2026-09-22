@@ -1,0 +1,124 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  min-height: 0;
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.region {
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  color: var(--c-accent);
+  text-transform: uppercase;
+}
+
+.close {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-full);
+  color: var(--c-text-faint);
+  transition:
+    color var(--t-fast) var(--ease-out-expo),
+    background var(--t-fast) var(--ease-out-expo);
+}
+
+.close:hover,
+.close:focus-visible {
+  color: var(--c-danger);
+  background: rgba(255, 77, 109, 0.12);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: var(--s-2);
+  max-height: 380px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: var(--s-1);
+}
+
+.occupant {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--r-sm);
+  background: rgba(255, 255, 255, 0.03);
+  text-align: left;
+  animation: rise-in var(--t-base) var(--ease-out-expo) both;
+  animation-delay: var(--delay, 0ms);
+  transition:
+    border-color var(--t-fast) var(--ease-out-expo),
+    background var(--t-fast) var(--ease-out-expo);
+}
+
+.occupant:hover,
+.occupant:focus-visible {
+  border-color: var(--glass-border-lit);
+  background: color-mix(in srgb, var(--c-accent) 12%, transparent);
+}
+
+.sprite {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--c-accent) 45%, transparent));
+}
+
+.info {
+  min-width: 0;
+}
+
+.occupantName {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-micro);
+  color: var(--c-text-dim);
+}
+
+.occupant:hover .occupantName {
+  color: var(--c-text);
+}
+
+.chance {
+  display: block;
+  font-size: var(--fs-micro);
+  color: var(--c-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.note {
+  font-size: var(--fs-micro);
+  color: var(--c-amber);
+  letter-spacing: 0.02em;
+}
+
+.empty {
+  padding: var(--s-4);
+  font-size: var(--fs-sm);
+  color: var(--c-text-faint);
+  text-align: center;
+}

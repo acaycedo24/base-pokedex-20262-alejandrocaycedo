@@ -1,0 +1,64 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-boot);
+  display: grid;
+  align-content: center;
+  gap: var(--s-2);
+  padding: clamp(var(--s-5), 8vw, var(--s-8));
+  background: var(--c-deep);
+  font-size: var(--fs-sm);
+  color: var(--c-text-dim);
+  animation: crt-flicker 3s steps(1, end) infinite;
+}
+
+.leaving {
+  animation: none;
+  opacity: 0;
+  transition: opacity var(--t-base) var(--ease-in-out);
+  pointer-events: none;
+}
+
+/* Líneas de escaneo sobre toda la pantalla de arranque. */
+.root::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.04) 0px,
+    rgba(255, 255, 255, 0.04) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+.line {
+  animation: rise-in 160ms var(--ease-out-expo) both;
+  letter-spacing: 0.04em;
+}
+
+.ok {
+  color: var(--c-cyan);
+}
+
+.caret {
+  display: inline-block;
+  width: 0.6em;
+  height: 1em;
+  margin-left: 0.2em;
+  vertical-align: -0.15em;
+  background: var(--c-cyan);
+  animation: caret-blink 1s steps(1, end) infinite;
+}
+
+.skip {
+  position: absolute;
+  right: clamp(var(--s-4), 6vw, var(--s-7));
+  bottom: clamp(var(--s-4), 6vw, var(--s-7));
+  font-size: var(--fs-micro);
+  letter-spacing: var(--tracking-wide);
+  color: var(--c-text-faint);
+  text-transform: uppercase;
+}

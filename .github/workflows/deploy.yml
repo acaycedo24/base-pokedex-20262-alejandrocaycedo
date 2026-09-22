@@ -1,0 +1,64 @@
+name: Desplegar en GitHub Pages
+
+# Cada push a main reconstruye y publica el sitio. `workflow_dispatch` permite
+# lanzarlo a mano desde la pestaña Actions si hiciera falta.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Permisos mínimos que exige el despliegue oficial de Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Si se empujan dos commits seguidos, se cancela el despliegue anterior en
+# lugar de encolarlos y publicar una versión ya obsoleta.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Construir
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # `npm ci` instala exactamente lo que fija package-lock.json.
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Comprobar tipos y estilo
+        run: npx tsc -b && npx oxlint
+
+      - name: Construir
+        run: npm run build
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Subir el sitio construido
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Publicar
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

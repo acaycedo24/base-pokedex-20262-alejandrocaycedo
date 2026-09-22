@@ -1,0 +1,127 @@
+/* Fondo de la terminal. Todas las capas son `position: fixed` y
+   `pointer-events: none`: el fondo nunca intercepta interacción. */
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-bg);
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      120% 80% at 50% -10%,
+      color-mix(in srgb, var(--c-accent) 14%, transparent) 0%,
+      transparent 60%
+    ),
+    radial-gradient(90% 60% at 50% 110%, var(--c-void-2) 0%, transparent 70%),
+    var(--c-deep);
+  transition: background var(--t-slow) var(--ease-in-out);
+}
+
+/* ── Rejilla en perspectiva ───────────────────────────────────────────────
+   Un plano inclinado sobre el eje X que se pierde en el horizonte. El
+   desplazamiento vertical del `background-position` da la sensación de
+   avanzar sin mover el elemento: se anima una propiedad barata y el
+   navegador no recalcula el layout.                                        */
+
+.grid {
+  --grid-step: 60px;
+
+  position: absolute;
+  inset: 45% -60% -35% -60%;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--c-accent) 22%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--c-accent) 22%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: var(--grid-step) var(--grid-step);
+  transform: perspective(340px) rotateX(64deg);
+  transform-origin: 50% 0;
+  animation: grid-drift 3.2s linear infinite;
+  /* Se desvanece hacia el horizonte en lugar de cortarse en seco. */
+  mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 65%, transparent);
+  opacity: 0.55;
+}
+
+/* Línea de horizonte: el brillo del que "nace" la rejilla. */
+.horizon {
+  position: absolute;
+  top: 45%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--c-accent) 35%,
+    var(--c-accent) 65%,
+    transparent
+  );
+  opacity: 0.5;
+  filter: blur(0.5px);
+  box-shadow: 0 0 24px 2px color-mix(in srgb, var(--c-accent) 45%, transparent);
+  animation: glow-pulse 5s var(--ease-in-out) infinite;
+}
+
+/* ── Partículas de datos ──────────────────────────────────────────────── */
+
+.particles {
+  position: absolute;
+  inset: 0;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: var(--r-full);
+  background: var(--c-accent);
+  opacity: 0.45;
+  animation: drift var(--dur, 18s) linear infinite;
+  animation-delay: var(--delay, 0s);
+  will-change: transform;
+}
+
+/* ── Líneas de escaneo CRT ────────────────────────────────────────────── */
+
+.scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.025) 0px,
+    rgba(255, 255, 255, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  animation: crt-flicker 7s steps(1, end) infinite;
+}
+
+/* ── Viñeta ───────────────────────────────────────────────────────────── */
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    100% 100% at 50% 50%,
+    transparent 40%,
+    rgba(2, 3, 10, 0.75) 100%
+  );
+}
+
+/* Con movimiento reducido la rejilla y las partículas quedan quietas:
+   siguen dando profundidad, dejan de generar movimiento periférico. */
+@media (prefers-reduced-motion: reduce) {
+  .grid,
+  .particle,
+  .horizon,
+  .scanlines {
+    animation: none;
+  }
+}
