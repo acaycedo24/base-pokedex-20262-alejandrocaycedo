@@ -23,8 +23,88 @@
 
     <title>PokeSearch // Terminal de Archivo</title>
   </head>
-  <body>
-    <div id="root"></div>
+  <body style="margin: 0; background: #02030a">
+    <div id="root">
+      <!-- Contenido provisional mientras arranca la aplicación. React lo
+           sustituye al montar. Sus estilos van en línea a propósito: tienen
+           que funcionar aunque la hoja de estilos no haya cargado. -->
+      <div
+        id="arranque"
+        style="
+          display: grid;
+          place-content: center;
+          gap: 12px;
+          min-height: 100vh;
+          padding: 24px;
+          color: #7e8fa6;
+          font-family: ui-monospace, Consolas, monospace;
+          font-size: 14px;
+          text-align: center;
+          letter-spacing: 0.12em;
+        "
+      >
+        <p style="margin: 0; color: #22e9f5">&gt;&gt; INICIALIZANDO TERMINAL…</p>
+        <noscript>
+          <p style="margin: 0; color: #ffb347">
+            Esta aplicación necesita JavaScript activado en el navegador.
+          </p>
+        </noscript>
+      </div>
+    </div>
+
+    <script>
+      /*
+       * Diagnóstico de arranque.
+       *
+       * Si la aplicación no llega a montarse, sin esto el usuario solo vería
+       * una pantalla negra, que no distingue entre "está cargando", "no hay
+       * conexión" y "hay un error". Aquí se muestra el motivo en pantalla.
+       *
+       * En cuanto React monta, sustituye el contenido de #root y este bloque
+       * desaparece del documento, así que no interfiere con la aplicación.
+       */
+      (function () {
+        function panel(titulo, detalle, color) {
+          var nodo = document.getElementById('arranque');
+          if (!nodo) return; // React ya montó: no hay nada que informar
+          nodo.innerHTML =
+            '<p style="margin:0;color:' +
+            color +
+            '">&gt;&gt; ' +
+            titulo +
+            '</p>' +
+            '<p style="margin:0;max-width:44ch;line-height:1.7;letter-spacing:normal">' +
+            detalle +
+            '</p>';
+        }
+
+        window.addEventListener('error', function (evento) {
+          var mensaje = evento.message || (evento.error && evento.error.message) || '';
+          // Un recurso que no carga (script, hoja de estilos) no trae mensaje.
+          if (!mensaje && evento.target && evento.target.src) {
+            mensaje = 'No se pudo cargar ' + evento.target.src;
+          }
+          panel('FALLO AL INICIAR', mensaje || 'Error desconocido', '#ff4d6d');
+        }, true);
+
+        window.addEventListener('unhandledrejection', function (evento) {
+          panel('FALLO AL INICIAR', 'Promesa rechazada: ' + evento.reason, '#ff4d6d');
+        });
+
+        // Si a los 12 segundos sigue sin montar, algo va mal aunque no se haya
+        // lanzado ninguna excepción.
+        setTimeout(function () {
+          panel(
+            'LA TERMINAL NO ARRANCÓ',
+            'Prueba a recargar con Ctrl + Shift + R. Si persiste, puede ser una ' +
+              'extensión del navegador bloqueando scripts, o una red que filtra ' +
+              'el acceso a pokeapi.co.',
+            '#ffb347',
+          );
+        }, 12000);
+      })();
+    </script>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
