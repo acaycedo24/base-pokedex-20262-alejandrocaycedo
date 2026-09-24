@@ -1,7 +1,7 @@
 # NOMBRE ESTUDIANTE:
 Alejandro Caycedo Montero
 
-#LINK DESPLEGADO:
+# LINK DESPLEGADO:
 https://acaycedo24.github.io/base-pokedex-20262-alejandrocaycedo/
 
 # PokeSearch — Terminal de Archivo Pokémon
